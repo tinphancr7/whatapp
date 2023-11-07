@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 
 function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
 	const contextMenuRef = useRef(null);
@@ -15,7 +15,6 @@ function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
 		};
 		document.addEventListener("click", handleOutsideClick);
 		return () => {
-			I;
 			document.removeEventListener("click", handleOutsideClick);
 		};
 	}, []);
@@ -26,13 +25,17 @@ function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
 	};
 	return (
 		<div
-			className={`bg-dropdown-background fixed py-2 z-[100]  shadow-xl`}
+			className={`bg-dropdown-background fixed top-0 left-0  py-2 z-[100]  shadow-xl`}
 			ref={contextMenuRef}
-			style={{top: cordinates.y, left: cordinates.x}}
+			// style={{top: cordinates.y, left: cordinates.x}}
 		>
 			<ul>
 				{options.map(({name, callback}) => (
-					<li key={name} onClick={(e) => handleClick(e, callback)}>
+					<li
+						key={name}
+						onClick={(e) => handleClick(e, callback)}
+						className="px-5 py-2 cursor-pointer hover:bg-background-default-hover"
+					>
 						<span className="text-white">{name}</span>
 					</li>
 				))}
@@ -40,3 +43,4 @@ function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
 		</div>
 	);
 }
+export default ContextMenu;

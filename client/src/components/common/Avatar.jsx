@@ -1,6 +1,10 @@
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
 import {FaCamera} from "react-icons/fa";
+import ContextMenu from "./ContextMenu";
+import PhotoPicker from "./PhotoPicker";
+import PhotoLibrary from "./PhotoLibrary";
+import CapturePhoto from "./CapturePhoto";
 function Avatar({type, image, setImage}) {
 	const [hover, setHover] = useState(false);
 	const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
@@ -8,6 +12,8 @@ function Avatar({type, image, setImage}) {
 		x: 0,
 		y: 0,
 	});
+	const [showPhotoLibrary, setShowPhotoLibrary] = useState(false);
+	const [showCapturePhoto, setShowCapturePhoto] = useState(false);
 	const [grabPhoto, setGrabPhoto] = useState(false);
 	const showContextMenu = (e) => {
 		e.preventDefault();
@@ -19,16 +25,51 @@ function Avatar({type, image, setImage}) {
 			const data = document.getElementById("photo-picker");
 			data.click();
 			document.body.onfocus = (e) => {
-				setGrabPhoto(false);
+				setTimeout(() => {
+					setGrabPhoto(false);
+				}, 1000);
 			};
 		}
 	});
 	const contextMenuOptions = [
-		{name: "Take Photo", callback: () => {}},
-		{name: "Choose From Library", callback: () => {}},
-		{name: "Upload Photo", callback: () => {}},
-		{name: "Remove Photo", callback: () => {}},
+		{
+			name: "Take Photo",
+			callback: () => {
+				setShowCapturePhoto(true);
+			},
+		},
+		{
+			name: "Choose From Library",
+			callback: () => {
+				setShowPhotoLibrary(true);
+			},
+		},
+		{
+			name: "Upload Photo",
+			callback: () => {
+				setGrabPhoto(true);
+			},
+		},
+		{
+			name: "Remove Photo",
+			callback: () => {
+				setImage("/default_avatar.png");
+			},
+		},
 	];
+	const photoPickerChange = (e) => {
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		const data = document.createElement("img");
+		reader.onloadend = (event) => {
+			data.src = event.target.result;
+			data.setAttribute("data-src", event.target.result);
+		};
+		reader.readAsDataURL(file);
+		setTimeout(() => {
+			setImage(data.src);
+		}, 1000);
+	};
 	return (
 		<>
 			<div className="flex items-center justify-center">
@@ -45,18 +86,18 @@ function Avatar({type, image, setImage}) {
 
 				{type === "xl" && (
 					<div
-						className="relative cursor-pointer z-0"
+						className="relative  cursor-pointer "
 						onMouseEnter={() => setHover(true)}
 						onMouseLeave={() => setHover(false)}
 					>
 						<div
-							className={`z-10 bg-photopicker-overlay-background h-60 w-${
+							className={`z-10 bg-photopicker-overlay-background h-60 w-60 absolute top-0 left-0 flex items-center rounded-full justify-center flex-col text-center gap-2 ${
 								hover ? "visible" : "hidden"
 							}`}
 							onClick={(e) => showContextMenu(e)}
 						>
 							<FaCamera
-								className="text-2x1"
+								className="text-2xl"
 								id="context-opener"
 								onClick={(e) => showContextMenu(e)}
 							/>
@@ -76,6 +117,18 @@ function Avatar({type, image, setImage}) {
 					cordinates={contextMenuCordinates}
 					contextMenu={isContextMenuVisible}
 					setContextMenu={setIsContextMenuVisible}
+				/>
+			)}
+			{showCapturePhoto && (
+				<CapturePhoto
+					setImage={setImage}
+					hideCapturePhoto={setShowCapturePhoto}
+				/>
+			)}
+			{showPhotoLibrary && (
+				<PhotoLibrary
+					setImage={setImage}
+					hidePhotoLibrary={setShowPhotoLibrary}
 				/>
 			)}
 			{grabPhoto && <PhotoPicker onChange={photoPickerChange} />}

@@ -1,4 +1,5 @@
 import {initializeApp} from "firebase/app";
+import {getAuth} from "firebase/auth";
 const firebaseConfig = {
 	apiKey: "AIzaSyDvhqnnR_EPAietk6BMLOjUcrJyqUEhNP4",
 	authDomain: "chat-app-ff86d.firebaseapp.com",
@@ -9,5 +10,4 @@ const firebaseConfig = {
 	measurementId: "G-XHLE4C0BQM",
 };
 const app = initializeApp(firebaseConfig);
-
-export const auth = app.auth();
+export const firebaseAuth = getAuth(app);

@@ -6,7 +6,8 @@ import {CHECK_USER_ROUTE} from "@/utils/ApiRoutes";
 import {useStateProvider} from "@/context/StateContext";
 import {useRouter} from "next/router";
 import {reducerCases} from "@/context/constants";
-import {auth, firebaseAuth} from "@/utils/FirebaseConfig";
+import {firebaseAuth} from "@/utils/FirebaseConfig";
+import axios from "axios";
 
 function login() {
 	const router = useRouter();
@@ -19,13 +20,13 @@ function login() {
 		const provider = new GoogleAuthProvider();
 		const {
 			user: {displayName, email, photoURL, uid},
-		} = await signInWithPopup(auth, provider);
+		} = await signInWithPopup(firebaseAuth, provider);
 		try {
 			if (email) {
 				const {data} = await axios.post(CHECK_USER_ROUTE, {
 					email,
 				});
-				if (data.status) {
+				if (!data.status) {
 					dispatch({
 						type: reducerCases.SET_USER_INFO,
 						userInfo: {
@@ -47,7 +48,7 @@ function login() {
 		}
 	};
 	return (
-		<div className="flex justify-center items-center bg-panel-header-background">
+		<div className="flex justify-center items-center bg-panel-header-background h-screen w-screen flex-col gap-6">
 			<div className="flex items-center justify-center gap-2 text-white">
 				<Image src="/whatsapp.gif" alt="whatsapp" height={300} width={300} />
 				<span className="text-7xl">Whatsapp</span>

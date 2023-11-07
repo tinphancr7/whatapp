@@ -19,3 +19,4 @@ function Input({name, state, setState, label = false}) {
 		</div>
 	);
 }
+export default Input;
