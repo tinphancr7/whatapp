@@ -1,6 +1,8 @@
+import {useStateProvider} from "@/context/StateContext";
 import {reducerCases} from "@/context/constants";
 import {ADD_MESSAGE_ROUTE} from "@/utils/ApiRoutes";
-import React from "react";
+import axios from "axios";
+import React, {useState} from "react";
 import {BsEmojiSmile} from "react-icons/bs";
 import {FaMicrophone} from "react-icons/fa";
 import {ImAttachment} from "react-icons/im";
@@ -43,7 +45,7 @@ function MessageBar() {
 					<input
 						type="text"
 						placeholder="Type a message"
-						className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg"
+						className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
 					/>

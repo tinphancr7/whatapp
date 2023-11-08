@@ -19,7 +19,7 @@ function login() {
 	const handleLogin = async () => {
 		const provider = new GoogleAuthProvider();
 		const {
-			user: {displayName, email, photoURL, uid},
+			user: {displayName: name, email, photoURL: profileImage},
 		} = await signInWithPopup(firebaseAuth, provider);
 		try {
 			if (email) {
@@ -30,15 +30,15 @@ function login() {
 					dispatch({
 						type: reducerCases.SET_USER_INFO,
 						userInfo: {
-							name: data.name,
-							email: data.email,
-							profileImage: data.image,
-							status: data.status,
+							name,
+							email,
+							profileImage,
+							status: "",
 						},
 					});
 					dispatch({
 						type: reducerCases.SET_NEW_USER,
-						newUser: false,
+						newUser: true,
 					});
 					router.push("/onboarding");
 				}

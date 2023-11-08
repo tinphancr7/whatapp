@@ -4,22 +4,22 @@ import {BsFilter} from "react-icons/bs";
 
 function SearchBar() {
 	return (
-		<div className="bg-sprch-input-container-background flex py-3 pl-5">
-			<div className="bg-panel-header-background flex items-center gap-2">
+		<div className="bg-search-input-container-background flex py-3 pl-5 items-center gap-3 h-14">
+			<div className="bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow ">
 				<div>
-					<BiSearchAlt2 className=" atext-panel-header-icon cursor-pointer text-left" />
+					<BiSearchAlt2 className=" text-panel-header-icon cursor-pointer text-xl" />
 				</div>
 				<div>
 					<input
 						type="text"
 						placeholder=" Search or start a new chat"
 						text-wt
-						cLassName="bg-transparent text-sm focus:outline-none"
+						className="bg-transparent text-sm focus:outline-none text-white w-full"
 					/>
 				</div>
 			</div>
 			<div className="pr-5 pl-3">
-				<BsFilter className=" atext-panel-header-icon cursor-pointer text-left" />
+				<BsFilter className=" text-panel-header-icon cursor-pointer text-xl" />
 			</div>
 		</div>
 	);
