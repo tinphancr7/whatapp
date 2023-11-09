@@ -14,12 +14,13 @@ import {io} from "socket.io-client";
 function Main() {
 	const router = useRouter();
 	const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
+
 	const [socketEvent, setSocketEvent] = useState(false);
 	const [redirectLogin, setRedirectLogin] = useState(false);
 	const socket = useRef();
-	// useEffect(() => {
-	// 	if (redirectLogin) router.push("/login");
-	// }, [redirectLogin]);
+	useEffect(() => {
+		if (redirectLogin) router.push("/login");
+	}, [redirectLogin]);
 
 	onAuthStateChanged(firebaseAuth, async (currentUser) => {
 		if (!currentUser) setRedirectLogin(true);
@@ -48,6 +49,7 @@ function Main() {
 	useEffect(() => {
 		if (userInfo) {
 			socket.current = io(HOST);
+
 			socket.current.emit("addUser", userInfo.id);
 			dispatch({
 				type: reducerCases.SET_SOCKET,
@@ -57,7 +59,7 @@ function Main() {
 	}, [userInfo]);
 	useEffect(() => {
 		if (socket.current && !socketEvent) {
-			socket.current.on("recieve-msg", (data) => {
+			socket.current.on("msg-recieve", (data) => {
 				dispatch({
 					type: reducerCases.ADD_MESSAGE,
 					messages: data,
@@ -85,7 +87,7 @@ function Main() {
 	return (
 		<div className="grid grid-cols-main h-screen w-screen max-h-screen overflow-hidden">
 			<ChatList />
-			{!currentChatUser ? <Chat /> : <Empty />}
+			{currentChatUser ? <Chat /> : <Empty />}
 		</div>
 	);
 }

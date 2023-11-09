@@ -29,7 +29,7 @@ const reducer = (state, action) => {
 		case reducerCases.CHANGE_CURRENT_CHAT_USER: {
 			return {
 				...state,
-				currentChatUser: action.currentChatUser,
+				currentChatUser: action.user,
 			};
 		}
 		case reducerCases.SET_MESSAGES: {

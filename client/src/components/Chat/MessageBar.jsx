@@ -10,6 +10,7 @@ import {MdSend} from "react-icons/md";
 
 function MessageBar() {
 	const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
+	console.log("userInfo", userInfo);
 	const [message, setMessage] = useState("");
 	const sendMessage = async (e) => {
 		e.preventDefault();
@@ -55,6 +56,7 @@ function MessageBar() {
 						<MdSend
 							className="text-panel-header-icon cursor-pointer text-xl"
 							title="Send message"
+							onClick={sendMessage}
 						/>
 						<FaMicrophone
 							className="text-panel-header-icon cursor-pointer"

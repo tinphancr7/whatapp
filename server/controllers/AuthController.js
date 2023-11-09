@@ -46,15 +46,16 @@ export const getAllUsers = async (req, res, next) => {
 				email: true,
 				about: true,
 				profilePicture: true,
-				createdAt: true,
-				updatedAt: true,
+				// createdAt: true,
+				// updatedAt: true,
 			},
 		});
+
 		const usersGroupByInitialLetter = {};
 		users.forEach((user) => {
 			const initialLetter = user.name.charAt(0).toUpperCase();
-			if (usersGroupByInitialLetter[initialLetter]) {
-				usersGroupByInitialLetter[initialLetter].push(user);
+			if (!usersGroupByInitialLetter[initialLetter]) {
+				usersGroupByInitialLetter[initialLetter] = [];
 			}
 			usersGroupByInitialLetter[initialLetter].push(user);
 		});

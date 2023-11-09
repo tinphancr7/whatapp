@@ -5,9 +5,11 @@ import ChatListItem from "./ChatLIstItem";
 import {GET_ALL_CONTACTS} from "@/utils/ApiRoutes";
 import {useStateProvider} from "@/context/StateContext";
 import axios from "axios";
+import {reducerCases} from "@/context/constants";
 
 function ContactsList() {
 	const [allContacts, setAllContacts] = useState([]);
+
 	const [{}, dispatch] = useStateProvider();
 	useEffect(() => {
 		const getContacts = async () => {
@@ -43,24 +45,27 @@ function ContactsList() {
 								<input
 									type="text"
 									placeholder=" Search Contacts"
-									text-wt
 									className="bg-transparent text-sm focus:outline-none"
 								/>
 							</div>
 						</div>
-						{Object.entries(allContacts).map(([initialLetter, userList]) => {
-							return (
-								<div key={Date.now() + initialLetter}>
-									<div className="text-teal-light pl-10 py-5 ">
-										{initialLetter}
-									</div>
-									{userList.map((contact) => {
-										return <ChatListItem data={contact} isContactPage={true} />;
-									})}
-								</div>
-							);
-						})}
 					</div>
+					{Object.entries(allContacts).map(([initialLetter, userList]) => {
+						return (
+							<div key={Date.now() + initialLetter}>
+								<div className="text-teal-light pl-10 py-5 ">
+									{initialLetter}
+								</div>
+								{userList.map((contact, index) => {
+									return (
+										<div key={index}>
+											<ChatListItem data={contact} isContactPage={true} />
+										</div>
+									);
+								})}
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</>

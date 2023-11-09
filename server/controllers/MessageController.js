@@ -1,7 +1,10 @@
+import getPrismaInstance from "../utils/PrismaClient.js";
+
 export const addMessage = async (req, res, next) => {
 	try {
 		const prisma = getPrismaInstance();
 		const {message, from, to} = req.body;
+		console.log("message", message, from, to);
 		const getUser = onlineUsers.get(to);
 		if (message && from && to) {
 			const newMessage = await prisma.messages.create({
@@ -9,7 +12,7 @@ export const addMessage = async (req, res, next) => {
 					message,
 					sender: {connect: {id: parselnt(from)}},
 					reciever: {connect: {id: parselnt(to)}},
-					messageStatus: getUser ? "delivred" : "sent",
+					messageStatus: getUser ? "delivered" : "sent",
 				},
 				include: {
 					sender: true,
@@ -20,6 +23,7 @@ export const addMessage = async (req, res, next) => {
 		}
 		return res.json({msg: "Failed", status: false});
 	} catch (err) {
+		console.log("err", err);
 		next(err);
 	}
 };
