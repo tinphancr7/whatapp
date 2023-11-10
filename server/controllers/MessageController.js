@@ -74,3 +74,104 @@ export const getMessages = async (req, res, next) => {
 		next(err);
 	}
 };
+export const getInitialContactsWithMessages = async (req, res) => {
+	try {
+		const userId = parseInt(req.params.from);
+		const prisma = getPrismaInstance();
+		const user = await prisma.users.findUnique({
+			where: {
+				id: userId,
+			},
+			include: {
+				sentMessages: {
+					include: {
+						reciever: true,
+						sender: true,
+					},
+					orderBy: {
+						createdAt: "desc",
+					},
+				},
+				recievedMessages: {
+					include: {
+						reciever: true,
+						sender: true,
+					},
+					orderBy: {
+						createdAt: "desc",
+					},
+				},
+			},
+		});
+		const messages = [...user.sentMessages, ...user.recievedMess];
+		messages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+		const users = new Map();
+		const messageStatusChange = [];
+		messages.forEach((msg) => {
+			const isSender = msg.senderId === userId;
+			const calculatedId = isSender ? msg.recievedId : msg.senderId;
+			if (msg.messageStatus === "sent") {
+				messageStatusChange.push(msg.id);
+			}
+			if (!user.get(calculatedId)) {
+				const {
+					id,
+					type,
+					message,
+					messageStatus,
+					createdAt,
+					senderId,
+					recieverId,
+				} = msg;
+				let user = {
+					messageId: id,
+					type,
+					message,
+					messageStatus,
+					createdAt,
+					senderId,
+					recieverId,
+				};
+				if (isSender) {
+					user = {
+						...user,
+						...msg.reciever,
+						totalUnreadMessages: 0,
+					};
+				} else {
+					user = {
+						...user,
+						...msg.sender,
+						totalUnreadMessages: messageStatus !== "read" ? 1 : 0,
+					};
+				}
+				users.set(calculatedId, {
+					...user,
+				});
+			} else if (messageStatus !== "read" && !isSender) {
+				const user = users.get(calculatedId);
+				user.set(calculatedId, {
+					...user,
+					totalUnreadMessages: user.totalUnreadMessages + 1,
+				});
+			}
+		});
+		if (messageStatusChange.length) {
+			await prisma.messages.updateMany({
+				where: {
+					id: {in: messageStatusChange},
+				},
+				data: {
+					messageStatus: "delivered",
+				},
+			});
+		}
+
+		return res.status(200).json({
+			user: Array.from(users.values()),
+			onlineUsers: Array.from(onlineUsers.keys()),
+		});
+	} catch (error) {
+		next(error);
+	}
+};

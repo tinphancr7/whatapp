@@ -37,6 +37,46 @@ io.on("connection", (socket) => {
 			});
 		}
 	});
+
+	socket.on("outgoing-voice-call", (data) => {
+		const sendUserSocket = onlineUsers.get(data?.to);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("incoming-voice-call", {
+				from: data?.from,
+				roomId: data?.roomId,
+				callType: data?.callType,
+			});
+		}
+	});
+	socket.on("outgoing-video-call", (data) => {
+		const sendUserSocket = onlineUsers.get(data?.to);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("incoming-video-call", {
+				from: data?.from,
+				roomId: data?.roomId,
+				callType: data?.callType,
+			});
+		}
+	});
+	socket.on("reject-voice-call", (data) => {
+		const sendUserSocket = onlineUsers.get(data?.to);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("voice-call-reject");
+		}
+	});
+	socket.on("reject-video-call", (data) => {
+		const sendUserSocket = onlineUsers.get(data?.to);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("video-call-reject");
+		}
+	});
+	socket.on("accept-incoming-call", ({id}) => {
+		const sendUserSocket = onlineUsers.get(id);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("accept-call");
+		}
+	});
+
 	socket.on("disconnect", () => {
 		onlineUsers.forEach((userId, socketId) => {
 			if (socketId === socket.id) {

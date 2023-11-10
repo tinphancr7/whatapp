@@ -6,6 +6,13 @@ export const initialState = {
 	currentChatUser: undefined,
 	messages: [],
 	socket: undefined,
+	messageSearch: false,
+	userContacts: [],
+	onlineUsers: [],
+	videoCall: undefined,
+	voiceCall: undefined,
+	incommingVoiceCall: undefined,
+	incommingVideoCall: undefined,
 };
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -48,6 +55,63 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				messages: [...state.messages, action.newMessage],
+			};
+		}
+		case reducerCases.SET_MESSAGE_SEARCH: {
+			return {
+				...state,
+				messageSearch: !state.messageSearch,
+			};
+		}
+		case reducerCases.SET_USER_CONTACTS: {
+			return {
+				...state,
+				userContacts: action.userContacts,
+			};
+		}
+		case reducerCases.SET_ONLINE_USERS: {
+			return {
+				...state,
+				onlineUsers: action.onlineUsers,
+			};
+		}
+		case reducerCases.SET_CONTACT_SEARCH: {
+			return {
+				...state,
+				contactSearch: !state.contactSearch,
+			};
+		}
+		case reducerCases.SET_VIDEO_CALL: {
+			return {
+				...state,
+				videoCall: action.videoCall,
+			};
+		}
+		case reducerCases.SET_VOICE_CALL: {
+			return {
+				...state,
+				voiceCall: action.voiceCall,
+			};
+		}
+		case reducerCases.END_CALL: {
+			return {
+				...state,
+				voiceCall: undefined,
+				videoCall: undefined,
+				incommingVoiceCall: undefined,
+				incommingVideoCall: undefined,
+			};
+		}
+		case reducerCases.SET_INCOMING_VOICE_CALL: {
+			return {
+				...state,
+				incommingVoiceCall: action.incommingVoiceCall,
+			};
+		}
+		case reducerCases.SET_INCOMING_VIDEO_CALL: {
+			return {
+				...state,
+				incommingVideoCall: action.incommingVideoCall,
 			};
 		}
 
