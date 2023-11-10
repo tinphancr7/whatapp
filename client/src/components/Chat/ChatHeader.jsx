@@ -10,14 +10,15 @@ import {reducerCases} from "@/context/constants";
 function ChatHeader() {
 	const [{currentChatUser}, dispath] = useStateProvider();
 	const handleVoiceCall = () => {
+		console.log("voice call");
 		dispath({
 			type: reducerCases.SET_VOICE_CALL,
-			voiceCall: {
-				...currentChatUser,
-				type: "out-going",
-				callType: "voice",
-				roomId: Date.now(),
-			},
+			// voiceCall: {
+			// 	// ...currentChatUser,
+			// 	type: "out-going",
+			// 	callType: "voice",
+			// 	roomId: Date.now(),
+			// },
 		});
 	};
 	const handleVideoCall = () => {
