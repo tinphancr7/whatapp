@@ -10,10 +10,25 @@ import {useStateProvider} from "@/context/StateContext";
 import {onAuthStateChanged} from "firebase/auth";
 import {firebaseAuth} from "@/utils/FirebaseConfig";
 import {io} from "socket.io-client";
+import SearchMessages from "./Chat/SearchMessages";
+import VideoCall from "./Call/VideoCall";
+import VoiceCall from "./Call/VoiceCall";
+import IncomingVideoCall from "./common/IncomingVideoCall";
 
 function Main() {
 	const router = useRouter();
-	const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
+	const [
+		{
+			userInfo,
+			currentChatUser,
+			messageSearch,
+			voiceCall,
+			videoCall,
+			incomingVoiceCall,
+			incomingVideoCall,
+		},
+		dispatch,
+	] = useStateProvider();
 
 	const [socketEvent, setSocketEvent] = useState(false);
 	const [redirectLogin, setRedirectLogin] = useState(false);
@@ -69,6 +84,43 @@ function Main() {
 					},
 				});
 			});
+
+			socket.current.on("incoming-video-call", ({from, roomId, callType}) => {
+				dispatch({
+					type: reducerCases.SET_INCOMING_VIDEO_CALL,
+					incomingVideoCall: {
+						...from,
+						roomId,
+						callType,
+					},
+				});
+			});
+			socket.current.on("incoming-voice-call", ({from, roomId, callType}) => {
+				dispatch({
+					type: reducerCases.SET_INCOMING_VOICE_CALL,
+					incomingVoiceCall: {
+						...from,
+						roomId,
+						callType,
+					},
+				});
+			});
+
+			socket.current.on("voice-call-rejected", () => {
+				dispatch({
+					type: reducerCases.END_CALL,
+				});
+			});
+			socket.current.on("video-call-rejected", () => {
+				dispatch({
+					type: reducerCases.END_CALL,
+				});
+			});
+			socket.current.on("accept-incoming-call", () => {
+				dispatch({
+					type: reducerCases.END_CALL,
+				});
+			});
 			setSocketEvent(true);
 		}
 	}, [socketEvent]);
@@ -89,10 +141,33 @@ function Main() {
 		};
 	}, [currentChatUser, userInfo]);
 	return (
-		<div className="grid grid-cols-main h-screen w-screen max-h-screen overflow-hidden">
-			<ChatList />
-			{currentChatUser ? <Chat /> : <Empty />}
-		</div>
+		<>
+			{incomingVoiceCall && <IncomingVideoCall />}
+			{incomingVideoCall && <IncomingVideoCall />}
+			{videoCall && (
+				<div className="h-screen w-screen max-h-full overflow-hidden">
+					<VideoCall />
+				</div>
+			)}
+			{voiceCall && (
+				<div className="h-screen w-screen max-h-full overflow-hidden">
+					<VoiceCall />
+				</div>
+			)}
+			{!videoCall && !voiceCall && (
+				<div className="grid grid-cols-main h-screen w-screen max-h-screen overflow-hidden">
+					<ChatList />
+					{currentChatUser ? (
+						<div className={messageSearch ? "grid grid-cols-2" : "grid-cols-2"}>
+							<Chat />
+							{messageSearch && <SearchMessages />}
+						</div>
+					) : (
+						<Empty />
+					)}
+				</div>
+			)}
+		</>
 	);
 }
 export default Main;
