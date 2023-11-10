@@ -42,6 +42,23 @@ function login() {
 					});
 					router.push("/onboarding");
 				}
+				else{
+					dispatch({
+						type: reducerCases.SET_USER_INFO,
+						userInfo: {
+							id: data.id,
+							name,
+							email,
+							profileImage:data.profilePicture,
+							status: data.status,
+						},
+					});
+					dispatch({
+						type: reducerCases.SET_NEW_USER,
+						newUser: false,
+					});
+					router.push("/");
+				}
 			}
 		} catch (error) {
 			console.log(error);

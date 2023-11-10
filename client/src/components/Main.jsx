@@ -30,20 +30,22 @@ function Main() {
 			});
 
 			if (!data.status) {
-				// router.push("/login");
+				router.push("/login");
 			}
 			if (data?.data) {
-				const {id, name, status, image, email} = data.data;
+				const {id, name, status, profilePicture:profileImage, email} = data.data;
+				dispatch({
+					type: reducerCases.SET_USER_INFO,
+					userInfo: {
+						id,
+						name,
+						email,
+						profileImage,
+						status,
+					},
+				});
 			}
-			dispatch({
-				type: reducerCases.SET_USER_INFO,
-				userInfo: {
-					name: data.name,
-					email: data.email,
-					profileImage: data.image,
-					status: data.status,
-				},
-			});
+			
 		}
 	});
 	useEffect(() => {
@@ -62,7 +64,9 @@ function Main() {
 			socket.current.on("msg-recieve", (data) => {
 				dispatch({
 					type: reducerCases.ADD_MESSAGE,
-					messages: data,
+					newMessage:{
+						...data.message
+					},
 				});
 			});
 			setSocketEvent(true);
