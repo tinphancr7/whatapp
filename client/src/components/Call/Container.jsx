@@ -27,7 +27,7 @@ function Container({data}) {
 					<Image
 						src={data.profilePicture}
 						alt="avatar"
-						heigth={300}
+						height={300}
 						width={300}
 						className="rounded-full"
 					/>
