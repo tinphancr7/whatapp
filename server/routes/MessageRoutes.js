@@ -2,10 +2,10 @@ import {Router} from "express";
 import {
 	addImageMessage,
 	addMessage,
-	addMessage,
 	getInitialContactsWithMessages,
 	getMessages,
 } from "../controllers/MessageController.js";
+import multer from "multer";
 
 const router = Router();
 const uploadImage = multer({dest: "uploads/images"});

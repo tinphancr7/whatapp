@@ -2,27 +2,30 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import {MdCall, MdVideocam} from "react-icons/md";
 import {BsThreeDotsVertical} from "react-icons/bs";
-import {useStateProvider} from "@/context/StateContext";
+
 import {IoVideocam} from "react-icons/io5";
 import {BiSearchAlt2} from "react-icons/bi";
 import {reducerCases} from "@/context/constants";
+import {useStateProvider} from "@/context/StateContext";
 
 function ChatHeader() {
-	const [{currentChatUser}, dispath] = useStateProvider();
+	const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
+
 	const handleVoiceCall = () => {
 		console.log("voice call");
-		dispath({
+		dispatch({
 			type: reducerCases.SET_VOICE_CALL,
-			// voiceCall: {
-			// 	// ...currentChatUser,
-			// 	type: "out-going",
-			// 	callType: "voice",
-			// 	roomId: Date.now(),
-			// },
+			voiceCall: {
+				// ...currentChatUser,
+				type: "out-going",
+				callType: "voice",
+				roomId: Date.now(),
+			},
 		});
 	};
 	const handleVideoCall = () => {
-		dispath({
+		console.log("video call");
+		dispatch({
 			type: reducerCases.SET_VIDEO_CALL,
 			voiceCall: {
 				...currentChatUser,
@@ -53,7 +56,7 @@ function ChatHeader() {
 				<BiSearchAlt2
 					className="text-panel-header-icon cursor-pointer text-xl"
 					onClick={() =>
-						dispath({
+						dispatch({
 							type: reducerCases.SET_MESSAGE_SEARCH,
 						})
 					}

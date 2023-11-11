@@ -6,7 +6,7 @@ import {BiSearchAlt2} from "react-icons/bi";
 import {IoClose} from "react-icons/io5";
 
 function SearchMessages() {
-	const [{currentChatUser, messages}, dispath] = useStateProvider();
+	const [{currentChatUser, messages}, dispatch] = useStateProvider();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchedMessages, setSearchedMessages] = useState([]);
 
@@ -28,7 +28,7 @@ function SearchMessages() {
 				<IoClose
 					className="cursor-pointer text-icon-lighter text-2xl"
 					onClick={() =>
-						dispath({
+						dispatch({
 							type: reducerCases.SET_MESSAGE_SEARCH,
 						})
 					}

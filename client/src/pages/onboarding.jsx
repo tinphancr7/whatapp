@@ -28,7 +28,7 @@ function onboarding() {
 	const onboardUserHandler = async () => {
 		if (validateDetails) {
 			try {
-				const email = userInfo?.email || "tin7dev@gmail.com";
+				const email = userInfo?.email || "tin9dev@gmail.com";
 				const {data} = await axios.post(ONBOARD_USER_ROUTE, {
 					email,
 					name,

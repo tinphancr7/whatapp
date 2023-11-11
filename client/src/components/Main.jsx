@@ -34,7 +34,7 @@ function Main() {
 	const [redirectLogin, setRedirectLogin] = useState(false);
 	const socket = useRef();
 	useEffect(() => {
-		if (redirectLogin) router.push("/login");
+		// if (redirectLogin) router.push("/login");
 	}, [redirectLogin]);
 
 	onAuthStateChanged(firebaseAuth, async (currentUser) => {
@@ -45,10 +45,16 @@ function Main() {
 			});
 
 			if (!data.status) {
-				router.push("/login");
+				// router.push("/login");
 			}
 			if (data?.data) {
-				const {id, name, status, profilePicture:profileImage, email} = data.data;
+				const {
+					id,
+					name,
+					status,
+					profilePicture: profileImage,
+					email,
+				} = data.data;
 				dispatch({
 					type: reducerCases.SET_USER_INFO,
 					userInfo: {
@@ -60,7 +66,6 @@ function Main() {
 					},
 				});
 			}
-			
 		}
 	});
 	useEffect(() => {
@@ -79,8 +84,8 @@ function Main() {
 			socket.current.on("msg-recieve", (data) => {
 				dispatch({
 					type: reducerCases.ADD_MESSAGE,
-					newMessage:{
-						...data.message
+					newMessage: {
+						...data.message,
 					},
 				});
 			});
