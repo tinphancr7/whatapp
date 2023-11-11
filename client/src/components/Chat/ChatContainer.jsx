@@ -2,6 +2,7 @@ import {useStateProvider} from "@/context/StateContext";
 import {calculateTime} from "@/utils/CalculateTime";
 import React from "react";
 import ImageMessage from "./ImageMessage";
+import VoiceMessage from "./VoiceMessage";
 
 function ChatContainer() {
 	const [{messages, currentChatUser, userInfo}] = useStateProvider();
@@ -44,6 +45,7 @@ function ChatContainer() {
 									</div>
 								)}
 								{message.type === "text" && <ImageMessage message={message} />}
+								{message.type === "text" && <VoiceMessage message={message} />}
 							</div>
 						))}
 					</div>

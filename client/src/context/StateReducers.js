@@ -11,8 +11,8 @@ export const initialState = {
 	onlineUsers: [],
 	videoCall: undefined,
 	voiceCall: undefined,
-	incommingVoiceCall: undefined,
-	incommingVideoCall: undefined,
+	incomingVoiceCall: undefined,
+	incomingVideoCall: undefined,
 };
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -98,20 +98,20 @@ const reducer = (state, action) => {
 				...state,
 				voiceCall: undefined,
 				videoCall: undefined,
-				incommingVoiceCall: undefined,
-				incommingVideoCall: undefined,
+				incomingVoiceCall: undefined,
+				incomingVideoCall: undefined,
 			};
 		}
 		case reducerCases.SET_INCOMING_VOICE_CALL: {
 			return {
 				...state,
-				incommingVoiceCall: action.incommingVoiceCall,
+				incomingVoiceCall: action.incomingVoiceCall,
 			};
 		}
 		case reducerCases.SET_INCOMING_VIDEO_CALL: {
 			return {
 				...state,
-				incommingVideoCall: action.incommingVideoCall,
+				incomingVideoCall: action.incomingVideoCall,
 			};
 		}
 

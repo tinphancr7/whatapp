@@ -41,15 +41,14 @@ function login() {
 						newUser: true,
 					});
 					router.push("/onboarding");
-				}
-				else{
+				} else {
 					dispatch({
 						type: reducerCases.SET_USER_INFO,
 						userInfo: {
 							id: data.id,
 							name,
 							email,
-							profileImage:data.profilePicture,
+							profileImage: data.profilePicture,
 							status: data.status,
 						},
 					});

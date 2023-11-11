@@ -2,13 +2,14 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import {MdCall} from "react-icons/md";
 import {BsThreeDotsVertical} from "react-icons/bs";
-import {useStateProvider} from "@/context/StateContext";
 import {IoVideocam} from "react-icons/io5";
 import {BiSearchAlt2} from "react-icons/bi";
 import {reducerCases} from "@/context/constants";
+import {useStateProvider} from "@/context/StateContext";
 
 function ChatHeader() {
-	const [{currentChatUser}, dispatch] = useStateProvider();
+	const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
+
 	const handleVoiceCall = () => {
 		dispatch({
 			type: reducerCases.SET_VOICE_CALL,

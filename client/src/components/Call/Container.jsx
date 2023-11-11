@@ -1,4 +1,5 @@
 import {useStateProvider} from "@/context/StateContext";
+import {reducerCases} from "@/context/constants";
 import Image from "next/image";
 import React, {useState} from "react";
 import {MdOutlineCallEnd} from "react-icons/md";
@@ -7,9 +8,18 @@ function Container({data}) {
 	const [{userInfo, videoCall, socket}, dispatch] = useStateProvider();
 	const [callAccepted, setCallAccepted] = useState(false);
 	const endCall = () => {
-		socket.emit("endCall", {
-			to: data.id,
-			from: userInfo.id,
+		const id = data.id;
+		if (data.callType === "voice") {
+			socket.current.emit("reject-voice-call", {
+				from: id,
+			});
+		} else {
+			socket.current.emit("reject-video-call", {
+				from: id,
+			});
+		}
+		dispatch({
+			type: reducerCases.END_CALL,
 		});
 	};
 	return (

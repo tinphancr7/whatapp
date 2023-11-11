@@ -5,14 +5,14 @@ export const addMessage = async (req, res, next) => {
 	try {
 		const prisma = getPrismaInstance();
 		const {message, from, to} = req.body;
-		console.log("message", message, from, to);
+
 		const getUser = onlineUsers.get(to);
 		if (message && from && to) {
 			const newMessage = await prisma.messages.create({
 				data: {
 					message,
-					sender: {connect: {id: parselnt(from)}},
-					reciever: {connect: {id: parselnt(to)}},
+					sender: {connect: {id: parseInt(from)}},
+					reciever: {connect: {id: parseInt(to)}},
 					messageStatus: getUser ? "delivered" : "sent",
 				},
 				include: {
@@ -91,6 +91,31 @@ export const addImageMessage = async (req, res, next) => {
 					reciever: {connect: {id: parseInt(to)}},
 					messageStatus: getUser ? "delivered" : "sent",
 					type: "image",
+				},
+			});
+			return res
+				.status(201)
+				.json({msg: "Success", status: true, message: newMessage});
+		}
+	} catch (error) {}
+};
+export const addAudioMessage = async (req, res, next) => {
+	try {
+		if (req.file) {
+			const date = new Date();
+			let fileName =
+				"uploads/recordings/" + date.getTime() + req.file.originalname;
+			renameSync(req.file.path, fileName);
+			const prisma = getPrismaInstance();
+			const {from, to} = req.body;
+			const getUser = onlineUsers.get(to);
+			const newMessage = await prisma.messages.create({
+				data: {
+					message: fileName,
+					sender: {connect: {id: parseInt(from)}},
+					reciever: {connect: {id: parseInt(to)}},
+					messageStatus: getUser ? "delivered" : "sent",
+					type: "audio",
 				},
 			});
 			return res

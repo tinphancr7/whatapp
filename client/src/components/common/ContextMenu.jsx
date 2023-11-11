@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from "react";
 
-function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
+function ContextMenu({options, coordinates, contextMenu, setContextMenu}) {
 	const contextMenuRef = useRef(null);
 	useEffect(() => {
 		const handleOutsideClick = (event) => {
@@ -27,7 +27,7 @@ function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
 		<div
 			className={`bg-dropdown-background fixed top-0 left-0  py-2 z-[100]  shadow-xl`}
 			ref={contextMenuRef}
-			// style={{top: cordinates.y, left: cordinates.x}}
+			style={{top: coordinates.y, left: coordinates.x}}
 		>
 			<ul>
 				{options.map(({name, callback}) => (

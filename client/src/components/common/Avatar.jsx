@@ -8,7 +8,7 @@ import CapturePhoto from "./CapturePhoto";
 function Avatar({type, image, setImage}) {
 	const [hover, setHover] = useState(false);
 	const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
-	const [contextMenuCordinates, setContextMenuCordinates] = useState({
+	const [contextMenuCoordinates, setContextMenuCoordinates] = useState({
 		x: 0,
 		y: 0,
 	});
@@ -17,7 +17,7 @@ function Avatar({type, image, setImage}) {
 	const [grabPhoto, setGrabPhoto] = useState(false);
 	const showContextMenu = (e) => {
 		e.preventDefault();
-		setContextMenuCordinates({x: e.pagex, y: e.pageY});
+		setContextMenuCoordinates({x: e.pageX, y: e.pageY});
 		setIsContextMenuVisible(true);
 	};
 	useEffect(() => {
@@ -114,7 +114,7 @@ function Avatar({type, image, setImage}) {
 			{isContextMenuVisible && (
 				<ContextMenu
 					options={contextMenuOptions}
-					cordinates={contextMenuCordinates}
+					coordinates={contextMenuCoordinates}
 					contextMenu={isContextMenuVisible}
 					setContextMenu={setIsContextMenuVisible}
 				/>
