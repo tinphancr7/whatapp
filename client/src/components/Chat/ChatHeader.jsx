@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "../common/Avatar";
-import {MdCall, MdVideocam} from "react-icons/md";
+import {MdCall} from "react-icons/md";
 import {BsThreeDotsVertical} from "react-icons/bs";
 import {useStateProvider} from "@/context/StateContext";
 import {IoVideocam} from "react-icons/io5";
@@ -8,9 +8,9 @@ import {BiSearchAlt2} from "react-icons/bi";
 import {reducerCases} from "@/context/constants";
 
 function ChatHeader() {
-	const [{currentChatUser}, dispath] = useStateProvider();
+	const [{currentChatUser}, dispatch] = useStateProvider();
 	const handleVoiceCall = () => {
-		dispath({
+		dispatch({
 			type: reducerCases.SET_VOICE_CALL,
 			voiceCall: {
 				...currentChatUser,
@@ -21,7 +21,7 @@ function ChatHeader() {
 		});
 	};
 	const handleVideoCall = () => {
-		dispath({
+		dispatch({
 			type: reducerCases.SET_VIDEO_CALL,
 			voiceCall: {
 				...currentChatUser,
@@ -37,7 +37,7 @@ function ChatHeader() {
 				<Avatar type="sm" image={currentChatUser?.profilePicture} />
 				<div className="flex flex-col">
 					<span className="text-primary-strong">{currentChatUser?.name}</span>
-					<span className="text-secondary text-sm">online/ofline</span>
+					<span className="text-secondary text-sm">online/offline</span>
 				</div>
 			</div>
 			<div className="flex gap-6">
@@ -52,7 +52,7 @@ function ChatHeader() {
 				<BiSearchAlt2
 					className="text-panel-header-icon cursor-pointer text-xl"
 					onClick={() =>
-						dispath({
+						dispatch({
 							type: reducerCases.SET_MESSAGE_SEARCH,
 						})
 					}
