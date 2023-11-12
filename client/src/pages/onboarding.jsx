@@ -10,6 +10,7 @@ import {useEffect, useState} from "react";
 
 function onboarding() {
 	const [{userInfo, newUser}, dispatch] = useStateProvider();
+	console.log("userInfo", userInfo);
 
 	const [name, setName] = useState(userInfo?.name || "");
 	const [about, setAbout] = useState("");
@@ -28,7 +29,7 @@ function onboarding() {
 	const onboardUserHandler = async () => {
 		if (validateDetails) {
 			try {
-				const email = userInfo?.email || "tin9dev@gmail.com";
+				const email = userInfo?.email || "tin10dev@gmail.com";
 				const {data} = await axios.post(ONBOARD_USER_ROUTE, {
 					email,
 					name,
@@ -48,6 +49,17 @@ function onboarding() {
 							status: about,
 						},
 					});
+
+					localStorage.setItem(
+						"userInfo",
+						JSON.stringify({
+							id: data?.user?.id,
+							name,
+							email,
+							profileImage: image,
+							status: about,
+						})
+					);
 					router.push("/");
 				}
 			} catch (err) {

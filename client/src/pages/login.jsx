@@ -26,6 +26,7 @@ function login() {
 				const {data} = await axios.post(CHECK_USER_ROUTE, {
 					email,
 				});
+				console.log("data", data);
 				if (!data.status) {
 					dispatch({
 						type: reducerCases.SET_USER_INFO,
@@ -43,19 +44,19 @@ function login() {
 					router.push("/onboarding");
 				} else {
 					dispatch({
-						type: reducerCases.SET_USER_INFO,
-						userInfo: {
-							id: data.id,
-							name,
-							email,
-							profileImage: data.profilePicture,
-							status: data.status,
-						},
-					});
-					dispatch({
 						type: reducerCases.SET_NEW_USER,
 						newUser: false,
 					});
+					localStorage.setItem(
+						"userInfo",
+						JSON.stringify({
+							id: data?.user?.id,
+							name: data?.user?.name,
+							email: data?.user?.email,
+							profileImage: data?.user?.profilePicture,
+							status: data?.user?.status,
+						})
+					);
 					router.push("/");
 				}
 			}

@@ -6,7 +6,7 @@ const nextConfig = {
 		NEXT_PUBLIC_ZEGO_SERVER: "",
 	},
 	images: {
-		domains: ["www.google.com", "lh3.googleusercontent.com"],
+		domains: ["www.google.com", "lh3.googleusercontent.com", "localhost"],
 	},
 };
 

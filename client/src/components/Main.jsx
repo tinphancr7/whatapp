@@ -31,57 +31,67 @@ function Main() {
 	] = useStateProvider();
 
 	const [socketEvent, setSocketEvent] = useState(false);
-	const [redirectLogin, setRedirectLogin] = useState(false);
+
 	const socket = useRef();
+
 	useEffect(() => {
-		// if (redirectLogin) router.push("/login");
-	}, [redirectLogin]);
-
-	onAuthStateChanged(firebaseAuth, async (currentUser) => {
-		if (!currentUser) setRedirectLogin(true);
-		if (!userInfo && currentUser?.email) {
-			const {data} = await axios.post(CHECK_USER_ROUTE, {
-				email: currentUser.email,
+		const user = JSON.parse(localStorage.getItem("userInfo"));
+		if (user) {
+			dispatch({
+				type: reducerCases.SET_USER_INFO,
+				userInfo: user,
 			});
-
-			if (!data.status) {
-				// router.push("/login");
-			}
-			if (data?.data) {
-				const {
-					id,
-					name,
-					status,
-					profilePicture: profileImage,
-					email,
-				} = data.data;
-				dispatch({
-					type: reducerCases.SET_USER_INFO,
-					userInfo: {
-						id,
-						name,
-						email,
-						profileImage,
-						status,
-					},
-				});
-			}
+		} else {
+			router.push("/login");
 		}
-	});
+	}, [userInfo?.id]);
+
+	// onAuthStateChanged(firebaseAuth, async (currentUser) => {
+	// 	if (!currentUser) setRedirectLogin(true);
+	// 	if (!userInfo && currentUser?.email) {
+	// 		const {data} = await axios.post(CHECK_USER_ROUTE, {
+	// 			email: currentUser.email,
+	// 		});
+
+	// 		if (!data.status) {
+	// 			// router.push("/login");
+	// 		}
+	// 		if (data?.data) {
+	// 			const {
+	// 				id,
+	// 				name,
+	// 				status,
+	// 				profilePicture: profileImage,
+	// 				email,
+	// 			} = data.data;
+	// 			dispatch({
+	// 				type: reducerCases.SET_USER_INFO,
+	// 				userInfo: {
+	// 					id,
+	// 					name,
+	// 					email,
+	// 					profileImage,
+	// 					status,
+	// 				},
+	// 			});
+	// 		}
+	// 	}
+	// });
 	useEffect(() => {
 		if (userInfo) {
 			socket.current = io(HOST);
-
-			socket.current.emit("addUser", userInfo.id);
+			socket.current.emit("add-user", userInfo?.id);
 			dispatch({
 				type: reducerCases.SET_SOCKET,
 				socket: socket,
 			});
 		}
-	}, [userInfo]);
+	}, [userInfo?.id]);
 	useEffect(() => {
-		if (socket.current && !socketEvent) {
-			socket.current.on("msg-recieve", (data) => {
+		console.log("socket", socket.current);
+		console.log("socketEvent", socketEvent);
+		if (socket.current) {
+			socket.current.on("msg-receive", (data) => {
 				dispatch({
 					type: reducerCases.ADD_MESSAGE,
 					newMessage: {
@@ -128,7 +138,7 @@ function Main() {
 			});
 			setSocketEvent(true);
 		}
-	}, [socketEvent]);
+	}, [socket.current]);
 	useEffect(() => {
 		const getMessages = async () => {
 			const {
@@ -136,15 +146,16 @@ function Main() {
 			} = await axios.get(
 				`${GET_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
 			);
+
 			dispatch({
 				type: reducerCases.SET_MESSAGES,
 				messages: messages,
 			});
-			if (currentChatUser?.id) {
-				getMessages();
-			}
 		};
-	}, [currentChatUser, userInfo]);
+		if (currentChatUser?.id) {
+			getMessages();
+		}
+	}, [currentChatUser?.id, userInfo?.id]);
 	return (
 		<>
 			{incomingVoiceCall && <IncomingVideoCall />}

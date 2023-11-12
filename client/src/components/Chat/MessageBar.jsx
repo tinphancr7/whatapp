@@ -34,6 +34,7 @@ function MessageBar() {
 		};
 	}, []);
 	const [message, setMessage] = useState("");
+
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 	const photoPickerChange = (e) => {
 		try {
@@ -80,10 +81,11 @@ function MessageBar() {
 				from: userInfo?.id,
 				message,
 			});
+
 			socket.current.emit("send-msg", {
 				to: currentChatUser?.id,
 				from: userInfo?.id,
-				message: data.message,
+				message: data?.message,
 			});
 			dispatch({
 				type: reducerCases.ADD_MESSAGE,
@@ -127,18 +129,19 @@ function MessageBar() {
 						</div>
 						<div className="flex w-10 items-center justify-center">
 							<button>
-								{message.length && (
+								{message.length > 0 ? (
 									<MdSend
 										className="text-panel-header-icon cursor-pointer text-xl"
 										title="Send message"
 										onClick={sendMessage}
 									/>
+								) : (
+									<FaMicrophone
+										className="text-panel-header-icon cursor-pointer"
+										title="Record"
+										onClick={() => setShowAudioRecorder(true)}
+									/>
 								)}
-								<FaMicrophone
-									className="text-panel-header-icon cursor-pointer"
-									title="Record"
-									onClick={() => setShowAudioRecorder(true)}
-								/>
 							</button>
 						</div>
 					</>

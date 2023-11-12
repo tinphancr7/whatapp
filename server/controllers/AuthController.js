@@ -13,7 +13,7 @@ export const checkUser = async (req, res, next) => {
 		if (!user) {
 			return res.json({msg: "User not found", status: false});
 		} else {
-			return res.json({msg: "User Found", status: true, data: user});
+			return res.json({msg: "User Found", status: true, user});
 		}
 	} catch (err) {
 		next(err);
@@ -29,7 +29,7 @@ export const onBoardUser = async (req, res, next) => {
 		const user = await prisma.user.create({
 			data: {email, name, about, profilePicture},
 		});
-		return res.json({msg: "Success", status: true, data: user});
+		return res.json({msg: "Success", status: true, user});
 	} catch (err) {
 		next(err);
 	}
@@ -45,8 +45,6 @@ export const getAllUsers = async (req, res, next) => {
 				email: true,
 				about: true,
 				profilePicture: true,
-				// createdAt: true,
-				// updatedAt: true,
 			},
 		});
 

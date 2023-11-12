@@ -28,7 +28,7 @@ function ImageMessage({message}) {
 						{calculateTime(message?.createdAt)}
 					</span>
 					<span>
-						{message.senderId === userInfo?.id && (
+						{message?.senderId === userInfo?.id && (
 							<MessageStatus status={message.MessageStatus} />
 						)}
 					</span>

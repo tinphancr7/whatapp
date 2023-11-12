@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {BiArrowBack, BiSearchAlt2} from "react-icons/bi";
 
-import ChatListItem from "./ChatLIstItem";
+import ChatListItem from "./ChatListItem";
 import {GET_ALL_CONTACTS} from "@/utils/ApiRoutes";
 import {useStateProvider} from "@/context/StateContext";
 import axios from "axios";
